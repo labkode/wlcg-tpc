@@ -13,6 +13,7 @@ all to any solution and opening the door to data corruption.
 
 This proposal adds client-provided checksum based on https://www.rfc-editor.org/rfc/rfc9530.html.
 
+# Context
 In HTTP TPC Pull mode the following interactions happen.
 
 Rather than proposing next HTTP headers to include checksum verification, this
@@ -85,6 +86,5 @@ this file should not be visible in the requested location. Implementors may dele
 put it ina quarantine area, it's up to them. The constraint here is that the file cannot be visible to clients
 until its checksum has been verified.
 
-# Scope
-
-# Objective
+# Proposed mechanism
+TODO

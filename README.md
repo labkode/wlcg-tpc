@@ -1,5 +1,6 @@
-# Proposal to include client checksum verification in the HTTP TPC WLCG API
-specification
+(DRAFT)
+
+# Proposal to include client checksum verification in the HTTP TPC WLCG API specification
 
 # Purpose
 WLCG transfers have been primarily dominated by the XRootD protocol[1]. This

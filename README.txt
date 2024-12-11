@@ -1,5 +1,3 @@
-(DRAFT)
-
 PROPOSAL TO ENHANCE CLIENT CHECKSUM VERIFICATION IN THE HTTP TPC WLCG API SPECIFICATION
 
 WLCG TPC is a specification created by the WLCG Data Transfers working group
@@ -8,12 +6,27 @@ proxy. The specificaton builds on top of WebDAV to provide a mechanism to perfor
 peer to peer data transfers across the network.
 
 The specification barely described some integrity mechanisms and this proposal enhances that
-initial work with up to data standards and clear description of the interactions between
+initial work with up to date standards and clear description of the interactions between
 hosts and the expectations when performing the data transfer (HTTP request).
 
-DATA INTEGRITY IN WLCG TPC PROTOCOL
+DATA INTEGRITY IN WLCG
 
-Some initial work has been documented in the TPC Wiki page that
+Some initial work on data integrity has been documented in the TPC Wiki available
+at https://twiki.cern.ch/twiki/bin/view/LCG/ThirdPartyCopy?sortcol=2;table=4;up=0#sorted_table
+under section "Features vs Storages and Protocols matrix".
+
+That section describes the capabilities of some of the storage technologies
+used in the WLCG and their possibility to provide a checksum (Query Checksum) and
+to compute a checksum when uploading data directly to the storage system (Upload-with-checksum).
+
+The above mentioned text describes two DEPRECATED methods of providing and computing checksums:
+- The usage of the header Content-MD5 (defined in http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html)
+is DEPRECATED and has been removed from the HTTP protocol (refer to https://www.rfc-editor.org/rfc/rfc7231), citing:
+"The Content-MD5 header field has been removed because it was inconsistently implemented with respect to partial responses."
+- The usage of
+
+
+
 
 WLCG transfers have been primarily dominated by the XRootD protocol[1]. This
 protocol provided out the box checksum negotation between client and server and
@@ -53,6 +66,7 @@ for illustration purposes, in FTS, the checksum will be submitted in the
 payload for submission job:
 
 *Example of FTS3 submission file*
+```
       {
         "files": [
           {
@@ -67,6 +81,7 @@ payload for submission job:
          ...
         }
       }
+```
 
 The transfer tool will receive the client checksum.
 The trasnfer toll will then initiate a 3rd party COPY.

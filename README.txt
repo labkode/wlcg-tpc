@@ -1,8 +1,20 @@
 (DRAFT)
 
-# Proposal to include client checksum verification in the HTTP TPC WLCG API specification
+PROPOSAL TO ENHANCE CLIENT CHECKSUM VERIFICATION IN THE HTTP TPC WLCG API SPECIFICATION
 
-# Purpose
+WLCG TPC is a specification created by the WLCG Data Transfers working group
+to optimize data movements across network hosts without having to use a middleware
+proxy. The specificaton builds on top of WebDAV to provide a mechanism to perform
+peer to peer data transfers across the network.
+
+The specification barely described some integrity mechanisms and this proposal enhances that
+initial work with up to data standards and clear description of the interactions between
+hosts and the expectations when performing the data transfer (HTTP request).
+
+DATA INTEGRITY IN WLCG TPC PROTOCOL
+
+Some initial work has been documented in the TPC Wiki page that
+
 WLCG transfers have been primarily dominated by the XRootD protocol[1]. This
 protocol provided out the box checksum negotation between client and server and
 client checksum verification to ensure maximum safety when writing a file.
@@ -13,7 +25,10 @@ all to any solution and opening the door to data corruption.
 
 This proposal adds client-provided checksum based on https://www.rfc-editor.org/rfc/rfc9530.html.
 
-# Context
+TPC PUSH MODE
+todo
+
+TPC PULL MODE
 In HTTP TPC Pull mode the following interactions happen.
 
 Rather than proposing next HTTP headers to include checksum verification, this
@@ -38,7 +53,6 @@ for illustration purposes, in FTS, the checksum will be submitted in the
 payload for submission job:
 
 *Example of FTS3 submission file*
-```
       {
         "files": [
           {
@@ -53,7 +67,6 @@ payload for submission job:
          ...
         }
       }
-```
 
 The transfer tool will receive the client checksum.
 The trasnfer toll will then initiate a 3rd party COPY.
@@ -63,14 +76,12 @@ The HTTP COPY is sent to the ACTIVE site (the one pulling the data from the
 source).
 The HTTP COPY will containt the following HTTP Headers:
 
-```
      COPY /event.root
      Host: activesite.cern.ch
      Source: pasivesite.cern.ch
 ---> X-Digest-Behaviour: enum (ABORT, PASS)
 ---> TransferHeaderRepre-Digest: adler=:1234:
      ... (elements ommited)
-```
 
 The ACTIVE site will then issue a GET request to PASIVE site to obtain the file.
 The ACTIVE site will write the file and then it must compute the checkusm with
@@ -85,6 +96,3 @@ If the value is ABORT, the ACTIVE site should mark the file invalid and
 this file should not be visible in the requested location. Implementors may delete the file or
 put it ina quarantine area, it's up to them. The constraint here is that the file cannot be visible to clients
 until its checksum has been verified.
-
-# Proposed mechanism
-TODO

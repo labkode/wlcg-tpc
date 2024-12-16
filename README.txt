@@ -11,7 +11,7 @@ hosts and the expectations when performing the data transfer (HTTP request).
 
 DATA INTEGRITY IN WLCG
 
-Some initial work on data integrity has been documented in the TPC Wiki available
+Initial work on data integrity has been documented in the TPC Wiki available
 at https://twiki.cern.ch/twiki/bin/view/LCG/ThirdPartyCopy?sortcol=2;table=4;up=0#sorted_table
 under section "Features vs Storages and Protocols matrix".
 
@@ -19,11 +19,16 @@ That section describes the capabilities of some of the storage technologies
 used in the WLCG and their possibility to provide a checksum (Query Checksum) and
 to compute a checksum when uploading data directly to the storage system (Upload-with-checksum).
 
-The above mentioned text describes two DEPRECATED methods of providing and computing checksums:
+The aforementioned text describes two DEPRECATED methods to provide and compute data integrity.
 - The usage of the header Content-MD5 (defined in http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html)
-is DEPRECATED and has been removed from the HTTP protocol (refer to https://www.rfc-editor.org/rfc/rfc7231), citing:
-"The Content-MD5 header field has been removed because it was inconsistently implemented with respect to partial responses."
-- The usage of
+is DEPRECATED and has been removed from the HTTP protocol (refer to https://www.rfc-editor.org/rfc/rfc7231), citing: "The Content-MD5 header field has been removed because it was inconsistently implemented with respect to partial responses."
+- The usage of obsolete Digest and Want-Digest headers, described in RFC 3230.
+
+Moreover, there is no explanation about how these data integrity mechanism should be used in a
+a TPC COPY requests.
+
+ENHANCEMENTS TO EXISTING WORK
+
 
 
 

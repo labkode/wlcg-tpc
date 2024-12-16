@@ -20,9 +20,9 @@ used in the WLCG and their possibility to provide a checksum (Query Checksum) an
 to compute a checksum when uploading data directly to the storage system (Upload-with-checksum).
 
 The aforementioned text describes two DEPRECATED methods to provide and compute data integrity.
-- The usage of the header Content-MD5 (defined in http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html)
+1. The usage of the header Content-MD5 (defined in http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html)
 is DEPRECATED and has been removed from the HTTP protocol (refer to https://www.rfc-editor.org/rfc/rfc7231), citing: "The Content-MD5 header field has been removed because it was inconsistently implemented with respect to partial responses."
-- The usage of obsolete Digest and Want-Digest headers, described in RFC 3230.
+2. The usage of obsolete Digest and Want-Digest headers, described in RFC 3230.
 
 Moreover, there is no explanation about how these data integrity mechanism should be used in a
 a TPC COPY requests.

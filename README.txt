@@ -1,4 +1,4 @@
-PROPOSAL TO ENHANCE CLIENT CHECKSUM VERIFICATION IN THE HTTP TPC WLCG API SPECIFICATION
+PROPOSAL TO ENHANCE DATA INTEGRITY THE HTTP TPC WLCG API SPECIFICATION
 
 WLCG TPC is a specification created by the WLCG Data Transfers working group
 to optimize data movements across network hosts without having to use a middleware

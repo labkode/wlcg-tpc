@@ -5,11 +5,17 @@ to optimize data movements across network hosts without having to use a middlewa
 proxy. The specificaton builds on top of WebDAV to provide a mechanism to perform
 peer to peer data transfers across the network.
 
-The specification barely described some integrity mechanisms and this proposal enhances that
+The specification describes some integrity mechanisms and this proposal enhances that
 initial work with up to date standards and clear description of the interactions between
 hosts and the expectations when performing the data transfer (HTTP request).
 
-DATA INTEGRITY IN WLCG
+
+Refer to this slideck for a summary (access is protected):
+https://indico.cern.ch/event/1538346/contributions/6474197/attachments/3053366/5397622/DOMA%20BDT%20TPC%20DATA%20INTEGRITY%20(1).pdf
+
+
+
+## DATA INTEGRITY IN WLCG
 
 Initial work on data integrity has been documented in the TPC Wiki available
 at https://twiki.cern.ch/twiki/bin/view/LCG/ThirdPartyCopy?sortcol=2;table=4;up=0#sorted_table
@@ -27,10 +33,7 @@ is DEPRECATED and has been removed from the HTTP protocol (refer to https://www.
 Moreover, there is no explanation about how these data integrity mechanism should be used in a
 a TPC COPY requests.
 
-ENHANCEMENTS TO EXISTING WORK
-
-
-
+## ENHANCEMENTS TO EXISTING WORK
 
 
 WLCG transfers have been primarily dominated by the XRootD protocol[1]. This

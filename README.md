@@ -59,25 +59,6 @@ The HTTP COPY will containt the following HTTP Headers:
 The ACTIVE site will issue a GET request with the  header `Want-Content-Digest` (example: `Want-Content-Digest: adler=9`) to the PASIVE site.
 The PASIVE site will return the file contents with its checksum in the header `Content-Digest` (example: `Content-Digest: adler=:1234:`).
 
-The PASIVE site is expeced to verify that the provided checksum matches the one of the new saved file.
-If the checksum is different the HTTP error code 412 (Pre-Condition Failed) MUST be returned to the ACTIVE site.
-The ACTIVE site will report the checksum error to the client via the usual performance marker open connection. The error provided to the client
-SHOULD be a human readable text explaining that the file coundn't be saved because of client-server checksum mismatch.
-
-
----
-
-
-The ACTIVE site will then issue a GET request to PASIVE site to obtain the file.
-The ACTIVE site will write the file and then it must compute the checkusm with
-the specific digest algorithm included in the HTTP request. If the ACTIVE site
-cannot use the specific digest algorithm, the behaviour is dominated by the
-X-Digest-Behaviour, which can contain for now only two case insensitive values: ABORT
-or PASS.
-If the specified behaviour is PASS, the file is clasified as valid.
-This mode is necessary to ensure that checksum
-verification can work with sites not supporting yet this specification.
-If the value is ABORT, the ACTIVE site should mark the file invalid and
-this file should not be visible in the requested location. Implementors may delete the file or
-put it ina quarantine area, it's up to them. The constraint here is that the file cannot be visible to clients
-until its checksum has been verified.
+The ACTIVE site is expeced to verify that the obtained checksum from the PASIVE site matches the one received from the client.
+If the checksum is different, the  ACTIVE site will report the checksum error to the client via the usual performance marker open connection.
+The error provided to the client SHOULD be a human readable text explaining that the file coundn't be saved because of client-server checksum mismatch.

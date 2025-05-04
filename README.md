@@ -20,7 +20,7 @@ Implementors must consider the words "adler" and "adler32" to refer to the same 
 
 ## NEW DATA INTEGRITY BEHAVIOUR IN TPC
 
-
+### Push mode
 The HTTP COPY is sent to the ACTIVE site (the one pulling the data from the
 source).
 The HTTP COPY will containt the following HTTP Headers:

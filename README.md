@@ -41,9 +41,81 @@ The HTTP COPY will containt the following HTTP Headers:
 
 The ACTIVE site will issue a PUT request with the same header (`Content-Digest: adler=:1234:`) to the PASIVE site.
 The PASIVE site is expeced to verify that the provided checksum matches the one of the new saved file.
+
+```
+                                                                                                     
+                                                                                                     
+                                                                                                     
+                        Perf makers     ┌────┐                                                       
+                        .....           │ 4  │                                                       
+       ┌────────────────────────────────┴────┴───────────────────────┐                               
+       │                Ok                                           │                               
+       ▼         ┌────┐                                              │                               
+┌─────────────┐  │ 1  │  COPY /event.root                            │                               
+│             │  └────┘  Host: activesite.cern.ch                    │                               
+│   CLIENT    ├──────────Destination: pasivesite.cern.ch             │                               
+│             │          Repr-Digest: adler:1234:             ┌────────────┐                         
+└─────────────┘                      │                        │            │                         
+                                     └───────────────────────▶│   ACTIVE   │◀─────────────────┐      
+                                                              │            │                  │      
+                                                              └────────────┘                  │      
+                                                                     │                        │      
+                                                        PUT /event.root                       │      
+                                                        Host: pasivesite.cern.ch              │      
+                                                        Repr-Digest: adler:1234:         201      
+                                                                     └───────────────┐        │      
+                                                                             ┌────┐  │        │      
+                                                                             │ 2  │  │        │┌────┐
+                                                                             └────┘  │        ││ 3  │
+                                                                                     │        │└────┘
+                                                                                     ▼        │      
+                                                                              ┌────────────┐  │      
+                                                                              │            │  │      
+                                                                              │   PASIVE   │──┘      
+                                                                              │            │         
+                                                                              └────────────┘         
+```
+
+
 If the checksum is different the HTTP error code 412 (Pre-Condition Failed) MUST be returned to the ACTIVE site.
 The ACTIVE site will report the checksum error to the client via the usual performance marker open connection. The error provided to the client
 SHOULD be a human readable text explaining that the file coundn't be saved because of client-server checksum mismatch.
+
+```
+                                                                                                     
+                                                                                                     
+                                                                                                     
+                  Perf makers                                                                        
+                  .....                                                                              
+                                                                                                     
+                  Error: client/server checksum mismatch                                             
+       ┌───────────────────────────────────────────────────────┐                                     
+       │                                                       │                                     
+       ▼          ┌────┐                                       │┌────┐                               
+┌─────────────┐   │ 1  │ COPY /event.root                      ││ 4  │                               
+│             │   └────┘ Host: activesite.cern.ch              │└────┘                               
+│   CLIENT    ├──────────Destination: pasivesite.cern.ch       │                                     
+│             │          Repr-Digest: adler:1234:              │                                     
+└─────────────┘                   │                     ┌────────────┐                               
+                                  │                     │            │                               
+                                  └────────────────────▶│   ACTIVE   │◀───────────────────────┐      
+                                                        │            │                        │      
+                                                        └────────────┘                        │      
+                                                         ┌────┐│                            412      
+                                                         │ 2  ││                              │      
+                                                         └────┘│                              │      
+                                                       PUT /event.root                        │      
+                                                       Host: pasivesite.cern.ch──────┐        │      
+                                                       Repr-Digest: adler:1234:      │        │      
+                                                                                     │        │      
+                                                                                     │        │      
+                                                                                     ▼        │┌────┐
+                                                                              ┌────────────┐  ││ 3  │
+                                                                              │            │  │└────┘
+                                                                              │   PASIVE   │──┘      
+                                                                              │            │         
+                                                                              └────────────┘
+```
 
 ### Pull mode
 The HTTP COPY is sent to the ACTIVE site that will get (GET) data from the PASIVE site.
@@ -62,3 +134,7 @@ The PASIVE site will return the file contents with its checksum in the header `C
 The ACTIVE site is expeced to verify that the obtained checksum from the PASIVE site matches the one received from the client.
 If the checksum is different, the  ACTIVE site will report the checksum error to the client via the usual performance marker open connection.
 The error provided to the client SHOULD be a human readable text explaining that the file coundn't be saved because of client-server checksum mismatch.
+
+
+```
+

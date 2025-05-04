@@ -13,7 +13,7 @@ hosts and the expectations when performing the data transfer (HTTP request).
 Refer to this [slideck](https://indico.cern.ch/event/1538346/contributions/6474197/attachments/3053366/5397622/DOMA%20BDT%20TPC%20DATA%20INTEGRITY%20(1).pdf
 ) for a summary (access is protected with CERN login):
 
-Implementors should follow the RFC9530 text for implementing the new headers.
+Implementors should follow the [RFC9530](https://datatracker.ietf.org/doc/rfc9530/) text for implementing the new headers.
 There is one addition to the spec to facilitate the adoption of the standard.
 The standard defines the word "adler" to refer to the digest adler32, however, in WLCG, the word "adler32" is widely used already.
 Implementors must consider the words "adler" and "adler32" to refer to the same digest.

@@ -19,17 +19,54 @@ The standard defines the word "adler" to refer to the digest adler32, however, i
 Implementors must consider the words "adler" and "adler32" to refer to the same digest.
 
 ## NEW DATA INTEGRITY BEHAVIOUR IN TPC
-
-### Push mode
-The HTTP COPY is sent to the ACTIVE site (the one pulling the data from the
-source).
-The HTTP COPY will containt the following HTTP Headers:
-
+The new behaviour is enabled when sending the HTTP header `Content-Digest` in the COPY request independently if the TPC is push or pull mode.
+```
      COPY /event.root
      Host: activesite.cern.ch
      Source: pasivesite.cern.ch
 ---> Content-Digest: adler=:1234:
      ... (elements ommited)
+```
+
+### Push mode
+The HTTP COPY is sent to the ACTIVE site that will send (PUT) data into the PASIVE site.
+The HTTP COPY will containt the following HTTP Headers:
+```
+     COPY /event.root
+     Host: activesite.cern.ch
+     Destination: pasivesite.cern.ch
+---> Content-Digest: adler=:1234:
+     ... (elements ommited)
+```
+
+The ACTIVE site will issue a PUT request with the same header (`Content-Digest: adler=:1234:`) to the PASIVE site.
+The PASIVE site is expeced to verify that the provided checksum matches the one of the new saved file.
+If the checksum is different the HTTP error code 412 (Pre-Condition Failed) MUST be returned to the ACTIVE site.
+The ACTIVE site will report the checksum error to the client via the usual performance marker open connection. The error provided to the client
+SHOULD be a human readable text explaining that the file coundn't be saved because of client-server checksum mismatch.
+
+### Pull mode
+The HTTP COPY is sent to the ACTIVE site that will get (GET) data from the PASIVE site.
+The HTTP COPY will containt the following HTTP Headers:
+```
+     COPY /event.root
+     Host: activesite.cern.ch
+     Source: pasivesite.cern.ch
+---> Content-Digest: adler=:1234:
+     ... (elements ommited)
+```
+
+The ACTIVE site will issue a GET request with the  header `Want-Content-Digest` (example: `Want-Content-Digest: adler=9`) to the PASIVE site.
+The PASIVE site will return the file contents with its checksum in the header `Content-Digest` (example: `Content-Digest: adler=:1234:`).
+
+The PASIVE site is expeced to verify that the provided checksum matches the one of the new saved file.
+If the checksum is different the HTTP error code 412 (Pre-Condition Failed) MUST be returned to the ACTIVE site.
+The ACTIVE site will report the checksum error to the client via the usual performance marker open connection. The error provided to the client
+SHOULD be a human readable text explaining that the file coundn't be saved because of client-server checksum mismatch.
+
+
+---
+
 
 The ACTIVE site will then issue a GET request to PASIVE site to obtain the file.
 The ACTIVE site will write the file and then it must compute the checkusm with

@@ -1,4 +1,4 @@
-PROPOSAL TO ENHANCE DATA INTEGRITY THE HTTP TPC WLCG API SPECIFICATION
+# PROPOSAL TO ENHANCE DATA INTEGRITY THE HTTP TPC WLCG API SPECIFICATION
 
 WLCG TPC is a specification created by the WLCG Data Transfers working group
 to optimize data movements across network hosts without having to use a middleware
@@ -10,8 +10,8 @@ initial work with up to date standards and clear description of the interactions
 hosts and the expectations when performing the data transfer (HTTP request).
 
 
-Refer to this slideck for a summary (access is protected):
-https://indico.cern.ch/event/1538346/contributions/6474197/attachments/3053366/5397622/DOMA%20BDT%20TPC%20DATA%20INTEGRITY%20(1).pdf
+Refer to this [slideck](https://indico.cern.ch/event/1538346/contributions/6474197/attachments/3053366/5397622/DOMA%20BDT%20TPC%20DATA%20INTEGRITY%20(1).pdf
+) for a summary (access is protected with CERN login):
 
 Implementors should follow the RFC9530 text for implementing the new headers.
 There is one addition to the spec to facilitate the adoption of the standard.

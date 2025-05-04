@@ -19,12 +19,12 @@ The standard defines the word "adler" to refer to the digest adler32, however, i
 Implementors must consider the words "adler" and "adler32" to refer to the same digest.
 
 ## NEW DATA INTEGRITY BEHAVIOUR IN TPC
-The new behaviour is enabled when sending the HTTP header `Content-Digest` in the COPY request independently if the TPC is push or pull mode.
+The new behaviour is enabled when sending the HTTP header `Repr-Digest` in the COPY request independently if the TPC is push or pull mode.
 ```
      COPY /event.root
      Host: activesite.cern.ch
      Source: pasivesite.cern.ch
----> Content-Digest: adler=:1234:
+---> Repr-Digest: adler=:1234:
      ... (elements ommited)
 ```
 
@@ -35,11 +35,11 @@ The HTTP COPY will containt the following HTTP Headers:
      COPY /event.root
      Host: activesite.cern.ch
      Destination: pasivesite.cern.ch
----> Content-Digest: adler=:1234:
+---> Repr-Digest: adler=:1234:
      ... (elements ommited)
 ```
 
-The ACTIVE site will issue a PUT request with the same header (`Content-Digest: adler=:1234:`) to the PASIVE site.
+The ACTIVE site will issue a PUT request with the same header (`Repr-Digest: adler=:1234:`) to the PASIVE site.
 The PASIVE site is expeced to verify that the provided checksum matches the one of the new saved file.
 
 ```
@@ -124,17 +124,84 @@ The HTTP COPY will containt the following HTTP Headers:
      COPY /event.root
      Host: activesite.cern.ch
      Source: pasivesite.cern.ch
----> Content-Digest: adler=:1234:
+---> Repr-Digest: adler=:1234:
      ... (elements ommited)
 ```
 
-The ACTIVE site will issue a GET request with the  header `Want-Content-Digest` (example: `Want-Content-Digest: adler=9`) to the PASIVE site.
-The PASIVE site will return the file contents with its checksum in the header `Content-Digest` (example: `Content-Digest: adler=:1234:`).
+The ACTIVE site will issue a GET request with the  header `Want-Repr-Digest` (example: `Want-Repr-Digest: adler=9`) to the PASIVE site.
+The PASIVE site will return the file contents with its checksum in the header `Repr-Digest` (example: `Repr-Digest: adler=:1234:`).
+
+```
+                                                                                                                 
+                                                                                                                 
+                                                                                                                 
+                        Perf makers     ┌────┐                                                                   
+                        .....           │ 4  │                                                                   
+       ┌────────────────────────────────┴────┴───────────────────────┐                                           
+       │                Ok                                           │                                           
+       ▼         ┌────┐                                              │                                           
+┌─────────────┐  │ 1  │  COPY /event.root                            │                                           
+│             │  └────┘  Host: activesite.cern.ch                    │                                           
+│   CLIENT    ├──────────Source: pasivesite.cern.ch                  │                                           
+│             │          Repr-Digest: adler:1234:             ┌────────────┐                                     
+└─────────────┘                      │                        │            │                                     
+                                     └───────────────────────▶│   ACTIVE   │◀─────────────────┐                  
+                                                              │            │                  │                  
+                                                              └────────────┘                  │                  
+                                                                     │                        │                  
+                                                        GET /event.root               HTTP/1.1 200 OK            
+                                                        Host: pasivesite.cern.ch      Repr-Digest: adler=:1234:  
+                                                        Want-Repr-Digest: adler=9     ... binary data ...        
+                                                                     └───────────────┐        │                  
+                                                                             ┌────┐  │        │                  
+                                                                             │ 2  │  │        │┌────┐            
+                                                                             └────┘  │        ││ 3  │            
+                                                                                     │        │└────┘            
+                                                                                     ▼        │                  
+                                                                              ┌────────────┐  │                  
+                                                                              │            │  │                  
+                                                                              │   PASIVE   │──┘                  
+                                                                              │            │                     
+                                                                              └────────────┘                     
+```
 
 The ACTIVE site is expeced to verify that the obtained checksum from the PASIVE site matches the one received from the client.
 If the checksum is different, the  ACTIVE site will report the checksum error to the client via the usual performance marker open connection.
 The error provided to the client SHOULD be a human readable text explaining that the file coundn't be saved because of client-server checksum mismatch.
 
-
+```
+                                                                                                                   
+                                                                                                                   
+                                                                                                                   
+Perf makers                                                                                                        
+.....                                                                                                              
+                                          ┌────┐                                                                   
+Error: client/server checksum mismatch    │ 4  │                                                                   
+         ┌────────────────────────────────┴────┴───────────────────────┐                                           
+         │                                                             │                                           
+         ▼         ┌────┐                                              │                                           
+  ┌─────────────┐  │ 1  │  COPY /event.root                            │                                           
+  │             │  └────┘  Host: activesite.cern.ch                    │                                           
+  │   CLIENT    ├──────────Source: pasivesite.cern.ch                  │                                           
+  │             │          Repr-Digest: adler:1234:             ┌────────────┐                                     
+  └─────────────┘                      │                        │            │                                     
+                                       └───────────────────────▶│   ACTIVE   │◀─────────────────┐                  
+                                                                │            │                  │                  
+                                                                └────────────┘                  │                  
+                                                                       │                        │                  
+                                                          GET /event.root               HTTP/1.1 200 OK            
+                                                          Host: pasivesite.cern.ch      Repr-Digest: adler=:999:   
+                                                          Want-Repr-Digest: adler=9     ... binary data ...        
+                                                                       └───────────────┐        │                  
+                                                                               ┌────┐  │        │                  
+                                                                               │ 2  │  │        │┌────┐            
+                                                                               └────┘  │        ││ 3  │            
+                                                                                       │        │└────┘            
+                                                                                       ▼        │                  
+                                                                                ┌────────────┐  │                  
+                                                                                │            │  │                  
+                                                                                │   PASIVE   │──┘                  
+                                                                                │            │                     
+                                                                                └────────────┘                     
 ```
 

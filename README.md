@@ -9,7 +9,7 @@ The specification describes some integrity mechanisms and this proposal enhances
 initial work with up to date standards and clear description of the interactions between
 hosts and the expectations when performing the data transfer (HTTP request).
 
-The terms data integrity and checksum are used interchangeable in this text.
+The terms data integrity and checksum used interchangeably in this text.
 
 
 Refer to this [slideck](https://indico.cern.ch/event/1538346/contributions/6474197/attachments/3053366/5397622/DOMA%20BDT%20TPC%20DATA%20INTEGRITY%20(1).pdf

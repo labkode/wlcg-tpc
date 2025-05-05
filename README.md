@@ -1,4 +1,4 @@
-# PROPOSAL TO ENHANCE DATA INTEGRITY THE HTTP TPC WLCG SPEC
+# DATA INTEGRITY IN WLCG TPC
 
 WLCG TPC is a specification created by the WLCG Data Transfers working group
 to optimize data movements across network hosts without having to use a middleware

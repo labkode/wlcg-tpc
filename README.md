@@ -167,7 +167,7 @@ The PASIVE site will return the file contents with its checksum in the header `R
                                                                               └────────────┘                     
 ```
 
-The ACTIVE site is expeced to verify that the obtained checksum from the PASIVE site matches the one received from the client.
+The ACTIVE site will compute the checksum of the receiving file and compare it to the one obtained from the PASIVE site.
 If the checksum is different, the  ACTIVE site will report the checksum error to the client via the usual performance marker open connection.
 The error provided to the client SHOULD be a human readable text explaining that the file coundn't be saved because of client-server checksum mismatch.
 

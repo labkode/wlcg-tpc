@@ -134,7 +134,7 @@ The ACTIVE site will issue a GET request with the  header `Want-Repr-Digest` (ex
 Please note that the ACTIVE site already knows the expected checksum to be received by the PASIVE site because the client (in operation 1) has already transmited it.
 The following scenarios can occur:
 - a) If the PASIVE site answers with a digest that does not match the one provided by the client, the ACTIVE site can short-cut and avoid performing a digest computation on the data and fail the transfer.
-- b) If the PASIVE site answers with a digest that is the same as provided by the client, the ACTIVE site MAY skip to compute the digest on the data to spare resources.
+- b) If the PASIVE site answers with the same digest as the one provided by the client, the ACTIVE site MUST still compute the digest from PASIVE's received data and not short-cut the verification. This is necessary to avoid corruption during traffic.
 - c) If the PASIVE site does not provide a digest (header not present) or digest type differs from the one provided by client, the the ACTIVE site MUST compute a digest based on the received data from the PASIVE site and check it against the one provided by the client.
 ```
                                                                                                                  
